@@ -1,0 +1,76 @@
+{% extends "finance/base.html" %}
+{% block title %}Transaction{% endblock title %}
+
+{% block content %}
+<a href="{% url 'export_transactions' %}"class='ml-4  my-4 inline-block
+px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg
+shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2
+focus:ring-indigo-500 transaction duration-200'>
+    Generate Report
+</a>
+
+<div class="max-w-5xl mx-auto mt-8 bg-white p-6 rounded-xl shadow-lg">
+
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">
+        Transaction List
+    </h1>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+
+            <!-- Header -->
+            <thead class="bg-indigo-500 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left">Date</th>
+                    <th class="px-6 py-3 text-left">Title</th>
+                    <th class="px-6 py-3 text-left">Amount</th>
+                    <th class="px-6 py-3 text-left">Type</th>
+                </tr>
+            </thead>
+
+            <!-- Body -->
+            <tbody class="divide-y divide-gray-200">
+                {% for transaction in transactions %}
+                <tr class="hover:bg-gray-100 transition duration-200">
+
+                    <td class="px-6 py-4 text-gray-700">
+                        {{ transaction.date|date:"d M Y" }}
+                    </td>
+
+                    <td class="px-6 py-4 font-medium text-gray-900">
+                        {{ transaction.title }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        ₹{{ transaction.amount|floatformat:2 }}
+                    </td>
+
+                    <td class="px-6 py-4">
+                        {% if transaction.transaction_type == "Income" %}
+                            <span class="text-green-600 font-semibold">
+                                Credit
+                            </span>
+                        {% else %}
+                            <span class="text-red-600 font-semibold">
+                                Debit
+                            </span>
+                        {% endif %}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-gray-500">
+                        No transactions found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+{% endblock content %}
